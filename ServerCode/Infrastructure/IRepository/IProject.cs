@@ -5,10 +5,10 @@ namespace ServerCode.Infrastructure.IRepository
 {
     public interface IProject
     {
-        IEnumerable<Project> getAll();
-        void Create(Project project);
-        Project Detail(int? id);
-        void Update(int? id, Project entity);
-        void Delete(int? id);
+        Task <IEnumerable<Project>> getAll();
+        Task<bool> Create(Project project);
+        Task<Project> Detail(int? id);
+        Task<bool> Update(int? id, Project entity);
+        Task<bool> Delete(int? id);
     }
 }

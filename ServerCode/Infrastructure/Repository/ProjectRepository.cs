@@ -15,45 +15,65 @@ namespace ServerCode.Infrastructure.Repository
             _Dbtxt = dbtxt;
         }
 
-        public void Create(Project project)
+        public async Task<bool> Create(Project project)
         {
-            _Dbtxt.projects.Add(project);
-            
-            
+            await _Dbtxt.projects.AddAsync(project);
 
-            
+            return true;   
             
         }
 
-        public void Delete(int? id)
+        public async Task<bool> Delete(int? id)
         {
-            var project = _Dbtxt.projects.Find(id);
+            var project = await _Dbtxt.projects.FindAsync(id);
+            if (project == null)
+            {
+                return false;   
+            }
             _Dbtxt.projects.Remove(project);
-            _Dbtxt.SaveChanges();
+           //await _Dbtxt.SaveChangesAsync();
+           return true;
 
         }
 
-        public Project Detail(int? id)
+        public async Task<Project> Detail(int? id)
         {
 
-            var project= _Dbtxt.projects.Find(id);
+            var project = await _Dbtxt.projects.FindAsync(id);
+            
+           
+            if (project == null)
+            {
+                return null;
+            }
             return project;
 
         }
 
-        public IEnumerable<Project> getAll()
-        {
-            return _Dbtxt.projects.Include(p=>p.task).ToList();
+        public async Task<IEnumerable<Project>> getAll()
+        { 
+            var data = await _Dbtxt.projects.Include(p => p.task).ToListAsync();
+            if (data == null)
+            {
+                throw new Exception("No Data Available");
+            }
+            return data;
         }
 
-        public void Update(int? id, Project entity)
+        public async Task<bool> Update(int? id, Project entity)
         {
-            var project = _Dbtxt.projects.Find(id);
-            _Dbtxt.projects.Update(entity);
-            _Dbtxt.SaveChanges();
+            var data = await _Dbtxt.projects.FindAsync(id);
+            if(data != null)
+            {
+                 _Dbtxt.projects.Update(entity);
+                return true;    
+                
+            }
+            
+
+            return false;
 
         }
 
-       
     }
 }

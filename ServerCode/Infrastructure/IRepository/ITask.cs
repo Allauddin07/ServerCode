@@ -4,10 +4,10 @@ namespace ServerCode.Infrastructure.IRepository
 {
     public interface ITask
     {
-        IEnumerable<Taask> getAll();
-        void Create(Taask task);
-        Taask Detail(int? id);
-        void Update(int? id, Taask entity);
-        void Delete(int? id);
+        Task <IEnumerable<Taask>> GetAll();
+        Task<bool> Create(Taask task);
+        Task<Taask> Detail(int? id);
+        Task<bool> Update(int? id, Taask entity);
+        Task<bool> Delete(int? id);
     }
 }

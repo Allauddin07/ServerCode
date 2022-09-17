@@ -1,5 +1,6 @@
 ﻿
 
+using Microsoft.EntityFrameworkCore;
 using ServerCode.DbaseContxt;
 using ServerCode.Infrastructure.IRepository;
 using ServerCode.Model;
@@ -15,43 +16,49 @@ namespace ServerCode.Infrastructure.Repository
             _Dbtxt = dbtxt;
         }
 
-        public void Create(Taask task)
+        
+
+        public async Task<bool> Create(Taask task)
         {
-            _Dbtxt.tasks.Add(task);
-
-            
-
-
+            await _Dbtxt.AddAsync(task);
+            return true;
         }
 
-        public void Delete(int? id)
+        public async Task<bool> Delete(int? id)
         {
-            var project = _Dbtxt.tasks.Find(id);
-            _Dbtxt.tasks.Remove(project);
-            _Dbtxt.SaveChanges();
-
+            var task = await _Dbtxt.tasks.FindAsync(id);
+            _Dbtxt.tasks.Remove(task);
+            await _Dbtxt.SaveChangesAsync();
+            return true;
         }
 
-        public Taask Detail(int? id)
+        public async Task<Taask> Detail(int? id)
         {
-
-            var project = _Dbtxt.tasks.Find(id);
-            return project;
-
+            var task = await _Dbtxt.tasks.FindAsync(id);
+            if (task == null)
+            {
+                 throw new Exception("Not Found");
+            }
+            return task;
         }
 
-        public IEnumerable<Taask> getAll()
+       public async Task<IEnumerable<Taask>> GetAll()
         {
-            return _Dbtxt.tasks.ToList();
+            var data = await _Dbtxt.tasks.ToListAsync();
+            if (data == null)
+            {
+                throw new Exception("No Data Available");
+            }
+            return data;
         }
 
-        public void Update(int? id, Taask entity)
+       public async Task<bool> Update(int? id, Taask entity)
         {
-            var project = _Dbtxt.tasks.Find(id);
+            await _Dbtxt.tasks.FindAsync(id);
             _Dbtxt.tasks.Update(entity);
-            _Dbtxt.SaveChanges();
+            await _Dbtxt.SaveChangesAsync();
 
+            return true;
         }
-
     }
 }
