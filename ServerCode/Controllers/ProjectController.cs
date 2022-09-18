@@ -105,7 +105,7 @@ namespace ServerCode.Controllers
         }
 
         //-----------------Updating Project---------------------->
-        [HttpPatch("update/{id:int}")]
+        [HttpPut("update/{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int? id, Project entity)
         {
             try
